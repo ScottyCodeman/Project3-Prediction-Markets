@@ -60,3 +60,4 @@ yarn-error.log*
 # Uncomment the line relevant to your project or add more if necessary.
 # /truffle-config.js
 # /hardhat.config.js
+secrets.toml
