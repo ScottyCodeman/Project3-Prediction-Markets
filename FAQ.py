@@ -3,31 +3,31 @@ import streamlit as st
 
 st.title("frequently asked questions")
 
-st.markdown("### How do I sign up into betting site")
-with st.expander("A"):
-    st.markdown("#### If you aren't already a member, simply sign up on the homepage.If you have an account, simply login" )
+st.markdown("### How do I become a registered user?")
+with st.expander("Answer"):
+    st.markdown("#### Click the Registration tab and Choose your username, and password" )
 
-st.markdown("### What are information needed to sign up")
-with st.expander("A"):
-    st.markdown("#### 1.Personal details")
-    st.markdown("#### 2.Occupation details")
+st.markdown("### Is my password safe?")
+with st.expander("Answer"):
+    st.markdown("#### Yes, your password is hashed so no one will know what it is but you.")
+    
+st.markdown("### How do I update my user info?")
+with st.expander("Answer"):
+    st.markdown("#### There is a pop up sidebar that will have updates for your user information.")
 
-st.markdown("### How do I contact customer support")
-with st.expander("A"):
-    st.markdown("#### You can contact support by selecting 'Contact Us'")
+st.markdown("### What kind of documentation do I need?")
+with st.expander("Answer"):
+    st.markdown("#### None!")
 
-st.markdown("### How do I change my password")
-with st.expander("A"):
-    st.markdown("#### To have password changed, simply click the link 'password to change'")
+st.markdown("### What if I forget my private key?")
+with st.expander("Answer"):
+    st.markdown("#### You wont be able to recover any of your funds, we don't store your private key, keep it somewhere safe, offline and online.")
 
-st.markdown("### Is there any minimum amount to play")
-with st.expander("A"):
-    st.markdown("#### Yes, minimum amount is $10")
+st.markdown("### Is there any minimum amount to bet")
+with st.expander("Answer"):
+    st.markdown("#### No,there is no minimum amount of Eth needed to bet")
 
-st.markdown("### Do I require verification documents to play ")
-with st.expander("A"):
-    st.markdown("#### Yes, a valid government issued ID and proof of address, not older than 3 years")
+st.markdown("### Can anyone start a game to bet on? ")
+with st.expander("Answer"):
+    st.markdown("#### Only the Admin's are able to create a game for betting.")
 
-st.markdown("### How do I get my winning money")
-with st.expander("A"):
-    st.markdown("#### Direct credit to your account as per details you given while you signed up")
