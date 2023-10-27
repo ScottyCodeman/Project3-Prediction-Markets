@@ -4,7 +4,7 @@ from web3 import Web3
 
 # Initialize Web3
 w3 = Web3(Web3.HTTPProvider("HTTP://127.0.0.1:7545"))  
-contract_address = "0x8467364C3e1D318cD9a4150BD8Fb660f3E0307D9"  
+contract_address = "0x629356703d9B59e37d264cf74c46bE06C29EdB2d"  
 contract_abi = """[
 	{
 		"inputs": [],
@@ -267,34 +267,75 @@ contract_abi = """[
 	}
 ]""" 
 
-
-
 contract = w3.eth.contract(address=contract_address, abi=contract_abi)
 
 st.title('Betting App')
+st.sidebar.write("Please connect with your Ethereum Private Key")
+private_key = st.sidebar.text_input('Your Ethereum Private Key', type="password") 
 
-private_key = st.text_input('Your Ethereum Private Key', type="password")  
-account = w3.eth.account.privateKeyToAccount(private_key).address
+if private_key:
+    try:
+        account = w3.eth.account.privateKeyToAccount(private_key).address
+        st.sidebar.write(f"Connected Wallet Address: **{account}**")
+    except:
+        st.sidebar.error("Invalid private key!")
+        account = None
+else:
+    account = None
 
+bet_team = st.radio("Select Team to Bet On", ["Team A", "Team B"])
+amount = st.text_input('Bet Amount (ETH)', "0.1")
+
+# Fetch contract data
+outcome_map = {0: "Pending", 1: "Team A Won", 2: "Team B Won"}
 outcome = contract.functions.getOutcome().call()
-betting_open = contract.functions.bettingOpen().call()
-total_bets_teamA, total_bets_teamB = contract.functions.getTotalBets().call()
 
-st.write(f"Outcome: {outcome}")
-st.write(f"Betting Open: {betting_open}")
-st.write(f"Total Bets for Team A: {total_bets_teamA}")
-st.write(f"Total Bets for Team B: {total_bets_teamB}")
+# Display outcome
+if outcome == 0:
+    st.write(f"**Outcome:** {outcome_map[outcome]}")
+else:
+    st.markdown(f"<span style='color:red'>**Outcome:** {outcome_map[outcome]}</span>", unsafe_allow_html=True)
 
-bet_team = st.radio("Select Team", ["Team A", "Team B"])
-amount = st.text_input('Bet Amount (ETH)')
+total_bets_teamA = w3.fromWei(contract.functions.getTotalBets().call()[0], 'ether')
+total_bets_teamB = w3.fromWei(contract.functions.getTotalBets().call()[1], 'ether')
+contract_balance = w3.fromWei(w3.eth.getBalance(contract_address), 'ether')
 
-if st.button("Place Bet"):
+# Odds calculation
+if total_bets_teamA == 0 or total_bets_teamB == 0:
+    st.warning("Odds cannot be calculated yet.")
+    odds_teamA = odds_teamB = 0.0  
+else:
+    odds_teamA = float(total_bets_teamB) / float(total_bets_teamA)  # Convert to float
+    odds_teamB = float(total_bets_teamA) / float(total_bets_teamB)  # Convert to float
+
+# Expected payout
+try:
+    bet_amount_eth = float(amount)
+    
+    if bet_team == "Team A":
+        raw_payout = bet_amount_eth * odds_teamA
+        # The maximum payout is limited by the funds of Team B
+        expected_payout = min(raw_payout, total_bets_teamB)
+    else:
+        raw_payout = bet_amount_eth * odds_teamB
+        # The maximum payout is limited by the funds of Team A
+        expected_payout = min(raw_payout, total_bets_teamA)
+except ValueError:
+    expected_payout = 0
+
+st.write(f"**Contract Balance:** {contract_balance} ETH")
+st.write(f"**Total Bets for Team A:** {total_bets_teamA} ETH")
+st.write(f"**Total Bets for Team B:** {total_bets_teamB} ETH")
+st.write(f"**Odds for Team A:** {odds_teamA:0.2f}")
+st.write(f"**Odds for Team B:** {odds_teamB:0.2f}")
+
+if st.button("Place Bet") and account:
     nonce = w3.eth.getTransactionCount(account)
     if bet_team == "Team A":
         tx = contract.functions.placeBet(True).buildTransaction({
             'from': account,
             'value': w3.toWei(amount, 'ether'),
-            'gas': 2000000,  # You may need to adjust
+            'gas': 2000000,  
             'gasPrice': w3.toWei('20', 'gwei'),
             'nonce': nonce,
         })
@@ -302,7 +343,7 @@ if st.button("Place Bet"):
         tx = contract.functions.placeBet(False).buildTransaction({
             'from': account,
             'value': w3.toWei(amount, 'ether'),
-            'gas': 2000000,  # You may need to adjust
+            'gas': 2000000,  
             'gasPrice': w3.toWei('20', 'gwei'),
             'nonce': nonce,
         })
@@ -310,20 +351,24 @@ if st.button("Place Bet"):
     signed_tx = w3.eth.account.signTransaction(tx, private_key)
     tx_hash = w3.eth.sendRawTransaction(signed_tx.rawTransaction)
     st.write(f"Transaction Hash: {tx_hash.hex()}")
+    st.success("Bet placed successfully!")
 
-if st.button("Claim Winnings"):
+st.markdown(f"<span style='color:green'>**Expected Payout (if you win):** {expected_payout:0.2f} ETH</span>", unsafe_allow_html=True)
+
+
+if st.button("Claim Winnings") and account:
     nonce = w3.eth.getTransactionCount(account)
     tx = contract.functions.claimWinnings().buildTransaction({
         'from': account,
-        'gas': 2000000,  # You may need to adjust
+        'gas': 2000000,  
         'gasPrice': w3.toWei('20', 'gwei'),
         'nonce': nonce,
     })
     signed_tx = w3.eth.account.signTransaction(tx, private_key)
     tx_hash = w3.eth.sendRawTransaction(signed_tx.rawTransaction)
     st.write(f"Transaction Hash: {tx_hash.hex()}")
+    st.success("Winnings claimed successfully!")
 
-st.sidebar.write("Warning: Never enter your real private key in any website or application!")
 
 if __name__ == '__main__':
     st.write("Developed using Streamlit and web3.py")
