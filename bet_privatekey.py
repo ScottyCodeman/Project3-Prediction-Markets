@@ -266,12 +266,47 @@ contract_abi = """[
 		"type": "function"
 	}
 ]""" 
-
 contract = w3.eth.contract(address=contract_address, abi=contract_abi)
 
-st.title('Betting App')
+# page config
+st.set_page_config(
+    page_title="Decentralized Betting Web App",
+    page_icon="🎰",
+    layout="wide",
+    initial_sidebar_state="expanded"
+)
+
+
+# theme color
+st.markdown("""
+    <style>
+        body {
+            color: white;
+            background-color: #1E1E1E;
+        }
+        h1, h2 {
+            color: #9C68EB;
+        }
+        .stButton>button {
+            color: white;
+            background-color: #5D39DB;
+            border: none;
+        }
+        .stButton>button:hover {
+            background-color: #9C68EB;
+        }
+    </style>
+    """, unsafe_allow_html=True)
+
+
+# main content
+st.header("TEAM A vs. TEAM B")
+st.subheader("Nov 1, 10:00 PM - in a day")
+
+#st.title('Betting App')
 st.sidebar.write("Please connect with your Ethereum Private Key")
 private_key = st.sidebar.text_input('Your Ethereum Private Key', type="password") 
+
 
 if private_key:
     try:
@@ -324,10 +359,17 @@ except ValueError:
     expected_payout = 0
 
 st.write(f"**Contract Balance:** {contract_balance} ETH")
-st.write(f"**Total Bets for Team A:** {total_bets_teamA} ETH")
-st.write(f"**Total Bets for Team B:** {total_bets_teamB} ETH")
-st.write(f"**Odds for Team A:** {odds_teamA:0.2f}")
-st.write(f"**Odds for Team B:** {odds_teamB:0.2f}")
+# Use col to display team data side by side
+col1, col2 = st.columns(2)
+with col1:
+    st.subheader("Team A")
+    st.write(f"**Total Bets:** {total_bets_teamA} ETH")
+    st.write(f"**Odds:** {odds_teamA:0.2f}")
+with col2:
+    st.subheader("Team B")
+    st.write(f"**Total Bets:** {total_bets_teamB} ETH")
+    st.write(f"**Odds:** {odds_teamB:0.2f}")
+
 
 if st.button("Place Bet") and account:
     nonce = w3.eth.getTransactionCount(account)
@@ -336,7 +378,7 @@ if st.button("Place Bet") and account:
             'from': account,
             'value': w3.toWei(amount, 'ether'),
             'gas': 2000000,  
-            'gasPrice': w3.toWei('20', 'gwei'),
+            'gasPrice': w3.toWei('1', 'gwei'),
             'nonce': nonce,
         })
     else:
@@ -344,7 +386,7 @@ if st.button("Place Bet") and account:
             'from': account,
             'value': w3.toWei(amount, 'ether'),
             'gas': 2000000,  
-            'gasPrice': w3.toWei('20', 'gwei'),
+            'gasPrice': w3.toWei('1', 'gwei'),
             'nonce': nonce,
         })
     
@@ -369,6 +411,3 @@ if st.button("Claim Winnings") and account:
     st.write(f"Transaction Hash: {tx_hash.hex()}")
     st.success("Winnings claimed successfully!")
 
-
-if __name__ == '__main__':
-    st.write("Developed using Streamlit and web3.py")
