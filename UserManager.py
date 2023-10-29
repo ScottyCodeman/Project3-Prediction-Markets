@@ -9,7 +9,7 @@ load_dotenv()
 class UserManager:
     def __init__(self):
         # Read configuration from .env file
-        self.MONGO_URI = st.secret['mongo_uri']
+        self.MONGO_URI = st.secrets['mongo_uri']
         self.client = MongoClient(self.MONGO_URI)
         self.db = self.client['my_database']
         self.users_collection = self.db['users']
