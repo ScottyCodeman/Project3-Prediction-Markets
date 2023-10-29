@@ -28,7 +28,7 @@ class UserManager:
             st.error("Username already exists. Please choose a different one.")
         else:
             password_hash = pbkdf2_sha256.hash(password)
-            self.users_collection.insert_one({'username': username, 'password': password_hash,'admin':False})
+            self.users_collection.insert_one({'username': username, 'password': password_hash,'admin': False})
             st.success("User registered successfully!")
 
     def login_user(self, username, password, session_state):
