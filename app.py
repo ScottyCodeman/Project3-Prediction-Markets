@@ -3,13 +3,7 @@ from UserManager import UserManager  # Import the UserManager class from the use
 import time
 # Initialize the user manager
 user_manager = UserManager()
-
-if "user_data" not in st.session_state:
-    st.session_state.user_data = {
-        "team_choice": None,
-        "wallet_address": "",
-        "eth_amount": 0.0
-    }
+game_link = "prediction-markets-game.streamlit.app"
 
 # Place the login, register, and page selection on the sidebar
 st.sidebar.title("User Authentication")
@@ -63,13 +57,9 @@ if st.session_state.authenticated:
             time.sleep(3)
             st.toast("🚨ADMIN is creating a game🚨")
             time.sleep(3)
-    # Input fields for team choice, wallet address, and ETH amount
-            team_choice = st.radio("Choose a Team", ["Team A", "Team B"])
-            wallet_address = st.text_input("Enter Wallet Address", value=st.session_state.user_data["wallet_address"])
-            eth_amount = st.number_input("Enter ETH Amount", min_value=0.0, value=st.session_state.user_data["eth_amount"])
+            st.session_state.messages.append({"role": "🤖", "content": f"Click [here]({game_link}) to join the game!"}) 
+    if "admin_creating_game" in st.session_state and st.session_state.admin_creating_game:
+        st.session_state.admin_creating_game = False  # Reset the flag
+        st.session_state.messages.append({"role": "🤖", "content": f"Click [here]({game_link}) to join the game!"})
 
-            # Update user choices in the session state
-            if st.button("Update Choices"):
-                st.session_state.user_data["team_choice"] = team_choice
-                st.session_state.user_data["wallet_address"] = wallet_address
-                st.session_state.user_data["eth_amount"] = eth_amount
+            
