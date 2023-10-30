@@ -4,9 +4,7 @@ import time
 
 refresh_chat = False
 
-# Button to trigger chat refresh
-if st.button("Refresh Chat"):
-    refresh_chat = True
+
 
 # Initialize the user manager
 user_manager = UserManager()
@@ -47,7 +45,9 @@ if st.session_state.authenticated:
     st.write(f"Welcome, {username} to the chatroom!")
 
     # Chatbox to leave messages
-
+    # Button to trigger chat refresh
+    if st.button("Refresh Chat"):
+        refresh_chat = True
 message = st.text_input("Leave a message:", key="message_input")
 if st.button("Send"):
     user_manager.store_chat_message(username, message)
