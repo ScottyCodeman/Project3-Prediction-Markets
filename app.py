@@ -49,6 +49,11 @@ if st.session_state.authenticated:
         chat_messages = user_manager.get_chat_messages()
         for chat_message in chat_messages:
             st.write(f"{chat_message['username']}: {chat_message['message']}")
+
+    if user_manager.is_admin(username):
+    if st.button("Clear Chat"):
+        user_manager.clear_chat_messages()
+        st.success("Chat messages cleared by admin.")
             
     # Check if the user is an admin and display the button to create a game
     if user_manager.is_admin(username):
