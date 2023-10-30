@@ -12,7 +12,7 @@ scheduler = BackgroundScheduler()
 scheduler.start()
 
 # Schedule the update_chat_messages function to run every 5 seconds
-scheduler.add_job(update_chat_messages, 'interval', seconds=5)
+scheduler.add_job(user_manager.update_chat_messages, 'interval', seconds=5)
 
 # Place the login, register, and page selection on the sidebar
 st.sidebar.title("User Authentication")
