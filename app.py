@@ -7,6 +7,13 @@ game_link = "prediction-markets-game.streamlit.app"
 
 # Place the login, register, and page selection on the sidebar
 st.sidebar.title("User Authentication")
+while True:
+    # Check for the update signal in MongoDB
+    update_signal = user_manager.db['update_signal'].find_one()
+
+    if update_signal:
+        # Trigger an experimental rerun
+        st.experimental_rerun()
 
 if "username" not in st.session_state:
     st.session_state.username = None
