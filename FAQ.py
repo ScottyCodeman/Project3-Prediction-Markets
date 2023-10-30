@@ -1,5 +1,6 @@
 import streamlit as st
 
+github_link = "https://github.com/Narimanhx/Project3-Prediction-Markets"
 
 st.title("frequently asked questions")
 
@@ -30,4 +31,7 @@ with st.expander("Answer"):
 st.markdown("### Can anyone start a game to bet on? ")
 with st.expander("Answer"):
     st.markdown("#### Only the Admin's are able to create a game for betting.")
+
+with st.expander("github link"):
+    st.write(github_link)
 
