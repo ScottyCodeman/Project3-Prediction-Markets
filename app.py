@@ -51,7 +51,8 @@ if st.session_state.authenticated:
     message = st.text_input("Leave a message:")
     if st.button("Send"):
         user_manager.store_chat_message(username, message)
-        message_holder = st.text_input("Leave a message:")
+        message_holder.empty()  # Clear the existing input box
+        message = st.text_input("Leave a message:")  # Create a new input box for future input
     # Display chat messages
     with st.container():
         chat_messages = user_manager.get_chat_messages()
