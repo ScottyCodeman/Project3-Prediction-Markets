@@ -46,19 +46,13 @@ class UserManager:
     def logout(self):
         st.session_state["authenticated_user"] = None
 
-    # Modify this method to store chat messages in st.session_state
-    def add_chat_message(self, username, message):
-        if "messages" not in st.session_state:
-            st.session_state.messages = []
+    def store_chat_message(self, username, message):
+        chat_message = {'username': username, 'message': message}
+        self.db['chat_messages'].insert_one(chat_message)
 
-        st.session_state.messages.append({"role": username, "content": message})
-
-    # Modify this method to retrieve chat messages from st.session_state
     def get_chat_messages(self):
-        if "messages" in st.session_state:
-            return st.session_state.messages
-        else:
-            return []
+        chat_messages = self.db['chat_messages'].find()
+        return chat_messages
 
     def is_admin(self, username):
         user_data = self.users_collection.find_one({'username': username})
