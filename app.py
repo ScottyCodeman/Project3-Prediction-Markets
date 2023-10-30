@@ -47,12 +47,13 @@ if st.session_state.authenticated:
     st.write(f"Welcome, {username} to the chatroom!")
 
     # Chatbox to leave messages
-    message_holder = st.empty()
-    message = st.text_input("Leave a message:")
-    if st.button("Send"):
-        user_manager.store_chat_message(username, message)
-        message_holder.empty()  # Clear the existing input box
-        message = st.text_input("Leave a message:")  # Create a new input box for future input
+message_holder = st.empty()
+message = st.text_input("Leave a message:", key="message_input")
+if st.button("Send"):
+    user_manager.store_chat_message(username, message)
+    message_holder.empty()  # Clear the existing input box
+    message = st.text_input("Leave a message:", key="message_input")  # Create a new input box with a unique key
+
     # Display chat messages
     with st.container():
         chat_messages = user_manager.get_chat_messages()
