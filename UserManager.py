@@ -1,10 +1,9 @@
 import streamlit as st
 from passlib.hash import pbkdf2_sha256
-from dotenv import load_dotenv
 import os
 from pymongo import MongoClient
 
-load_dotenv()
+
 
 class UserManager:
     def __init__(self):
