@@ -45,6 +45,10 @@ class UserManager:
     def logout(self):
         st.session_state["authenticated_user"] = None
 
+    def update_chat_messages():
+        chat_messages = user_manager.get_chat_messages()
+        # You can then update the chat display with the new messages
+
     def store_chat_message(self, username, message):
         chat_message = {'username': username, 'message': message}
         self.db['chat_messages'].insert_one(chat_message)
