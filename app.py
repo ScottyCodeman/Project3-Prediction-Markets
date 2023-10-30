@@ -42,14 +42,14 @@ if st.session_state.authenticated:
     # Chatbox to leave messages
     message = st.text_input("Leave a message:")
     if st.button("Send"):
-        user_manager.add_chat_message(username, message)
+        user_manager.store_chat_message(username, message)
 
     # Display chat messages
     with st.container():
         chat_messages = user_manager.get_chat_messages()
         for chat_message in chat_messages:
-            with st.chat_message(chat_message["role"]):
-                st.markdown(chat_message["content"])
+            st.write(f"{chat_message['username']}: {chat_message['message']}")
+            
     # Check if the user is an admin and display the button to create a game
     if user_manager.is_admin(username):
         if st.button("Create Game"):
