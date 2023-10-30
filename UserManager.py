@@ -53,6 +53,9 @@ class UserManager:
     def get_chat_messages(self):
         chat_messages = self.db['chat_messages'].find()
         return chat_messages
+        
+    def clear_chat_messages(self):
+        self.db['chat_messages'].delete_many({})
 
     def is_admin(self, username):
         user_data = self.users_collection.find_one({'username': username})
