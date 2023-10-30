@@ -50,9 +50,6 @@ class UserManager:
         chat_message = {'username': username, 'message': message}
         self.db['chat_messages'].insert_one(chat_message)
 
-        # Signal the need for an update
-        self.db['update_signal'].insert_one({'timestamp': datetime.now()})
-
     def get_chat_messages(self):
         chat_messages = self.db['chat_messages'].find()
         return chat_messages
