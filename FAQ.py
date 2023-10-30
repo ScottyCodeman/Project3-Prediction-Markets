@@ -31,7 +31,7 @@ with st.expander("Answer"):
 st.markdown("### Can anyone start a game to bet on? ")
 with st.expander("Answer"):
     st.markdown("#### Only the Admin's are able to create a game for betting.")
-
+st.markdown("### Github")
 with st.expander("github link"):
     st.write(github_link)
 
