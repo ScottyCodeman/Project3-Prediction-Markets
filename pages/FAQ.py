@@ -1,6 +1,6 @@
 import streamlit as st
 
-
+github_link = "https://github.com/Narimanhx/Project3-Prediction-Markets"
 st.title("frequently asked questions")
 
 st.markdown("### How do I become a registered user?")
@@ -32,5 +32,6 @@ with st.expander("Answer"):
     st.markdown("#### Only the Admin's are able to create a game for betting.")
 st.markdown("### Github")    
 with st.expander("github link"):
+    #st.markdown("[Github](https://github.com/Narimanhx/Project3-Prediction-Markets))
     st.write(github_link)
 
