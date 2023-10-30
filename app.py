@@ -4,7 +4,9 @@ import time
 
 refresh_chat = False
 
-
+# Button to trigger chat refresh
+if st.button("Refresh Chat"):
+    refresh_chat = True
 
 # Initialize the user manager
 user_manager = UserManager()
@@ -45,10 +47,7 @@ if st.session_state.authenticated:
     st.write(f"Welcome, {username} to the chatroom!")
 
     # Chatbox to leave messages
-    # Button to trigger chat refresh
-    if st.button("Refresh Chat"):
-        refresh_chat = True
-message = st.text_input("Leave a message:", key="message_input")
+    message = st.text_input("Leave a message:")
     if st.button("Send"):
         user_manager.store_chat_message(username, message)
 
@@ -58,19 +57,19 @@ message = st.text_input("Leave a message:", key="message_input")
         for chat_message in chat_messages:
             st.write(f"{chat_message['username']}: {chat_message['message']}")
 
-if user_manager.is_admin(username):
-    if st.button("Clear Chat"):
-        user_manager.clear_chat_messages()
-        st.success("Chat messages cleared by admin.")
+    if user_manager.is_admin(username):
+        if st.button("Clear Chat"):
+            user_manager.clear_chat_messages()
+            st.success("Chat messages cleared by admin.")
             
     # Check if the user is an admin and display the button to create a game
-if user_manager.is_admin(username):
-    if st.button("Create Game"):
-        st.toast("🚨ADMIN is creating a game🚨")
-        time.sleep(3)
-        st.toast("🚨ADMIN is creating a game🚨")
-        time.sleep(3)
-        st.session_state.messages.append({"role": "🤖", "content": f"Click [here]({game_link}) to join the game!"}) 
-if "admin_creating_game" in st.session_state and st.session_state.admin_creating_game:
+    if user_manager.is_admin(username):
+        if st.button("Create Game"):
+            st.toast("🚨ADMIN is creating a game🚨")
+            time.sleep(3)
+            st.toast("🚨ADMIN is creating a game🚨")
+            time.sleep(3)
+            st.session_state.messages.append({"role": "🤖", "content": f"Click [here]({game_link}) to join the game!"}) 
+    if "admin_creating_game" in st.session_state and st.session_state.admin_creating_game:
         st.session_state.admin_creating_game = False  # Reset the flag
         st.session_state.messages.append({"role": "🤖", "content": f"Click [here]({game_link}) to join the game!"})
