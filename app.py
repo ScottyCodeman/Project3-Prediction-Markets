@@ -32,6 +32,8 @@ if state == "Register":
     password = st.sidebar.text_input("Password", type="password")
     if st.sidebar.button("Register"):
         user_manager.register_user(username, password)
+        # Clear the radio button selection for "Register" after the button is clicked
+        st.session_state.radio_value = None
 
 if state == "Login":
     username = st.sidebar.text_input("Username")
@@ -39,9 +41,11 @@ if state == "Login":
     if st.sidebar.button("Login"):
         if user_manager.login_user(username, password, st.session_state):
             st.session_state.authenticated = True
+            # Clear the radio button selection for "Login" after the button is clicked
+            st.session_state.radio_value = None
             # st.experimental_rerun()
 
-# Render chat interface if user is authenticated
+# Render chat interface if the user is authenticated
 if st.session_state.authenticated:
     st.title("💬Chatroom💬")
     st.write(f"Welcome, {username} to the chatroom!")
@@ -60,7 +64,7 @@ if st.session_state.authenticated:
     if user_manager.is_admin(username):
         if st.button("Clear Chat"):
             user_manager.clear_chat_messages()
-            st.success("Chat messages cleared by admin.")
+            st.success("Chat messages cleared by the admin.")
             
     # Check if the user is an admin and display the button to create a game
     if user_manager.is_admin(username):
@@ -73,5 +77,3 @@ if st.session_state.authenticated:
     if "admin_creating_game" in st.session_state and st.session_state.admin_creating_game:
         st.session_state.admin_creating_game = False  # Reset the flag
         st.session_state.messages.append({"role": "🤖", "content": f"Click [here]({game_link}) to join the game!"})
-
-            
