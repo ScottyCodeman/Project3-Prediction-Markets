@@ -2,5 +2,5 @@ psycopg2-binary==2.9.9
 sqlalchemy==2.0.22
 passlib==1.7.4
 pymongo<=4.5.0
-apscheduler==3.8.0
+apscheduler==4.0.0
 
