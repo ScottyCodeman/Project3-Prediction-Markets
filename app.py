@@ -2,24 +2,11 @@ import streamlit as st
 from UserManager import UserManager  # Import the UserManager class from the user_manager module
 import time
 
-def inject_custom_js():
-    js_code = """
-    <script>
-    // Function to refresh the page every 5 seconds
-    function refreshPage() {
-        setTimeout(function () {
-            location.reload();
-        }, 5000); // 5 seconds
-    }
+refresh_chat = False
 
-    // Call the refresh function when the page loads
-    refreshPage();
-    </script>
-    """
-    return js_code
-
-# Inject the JavaScript code into the Streamlit app
-st.markdown(inject_custom_js(), unsafe_allow_html=True)
+# Button to trigger chat refresh
+if st.button("Refresh Chat"):
+    refresh_chat = True
 
 # Initialize the user manager
 user_manager = UserManager()
