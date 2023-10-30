@@ -1,9 +1,18 @@
 import streamlit as st
 from UserManager import UserManager  # Import the UserManager class from the user_manager module
 import time
+from apscheduler.schedulers.background import BackgroundScheduler
+
 # Initialize the user manager
 user_manager = UserManager()
-game_link = "prediction-markets-game.streamlit.app"
+game_link = "prediction-markets.streamlit.app"
+
+# Initialize the scheduler
+scheduler = BackgroundScheduler()
+scheduler.start()
+
+# Schedule the update_chat_messages function to run every 5 seconds
+scheduler.add_job(update_chat_messages, 'interval', seconds=5)
 
 # Place the login, register, and page selection on the sidebar
 st.sidebar.title("User Authentication")
